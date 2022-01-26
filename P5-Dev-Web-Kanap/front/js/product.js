@@ -39,26 +39,59 @@ fetch(apiUrl + "/" + id)
 
       // ***************************************** ligne 50  ajout  41
 
-      let panier = []
-      if (localStorage.getItem("panier")) {
-        panier.push(...JSON.parse(localStorage.getItem("panier")))
-      }
 
 
       // ***************************************** HERE
 
-// ici
+      // ici
 
-      console.log(panier)
-      let f = panier.filter(obj => {
-        return obj.id == id && obj.couleur == colors
 
-      })
-      if ( f.length == 0 ) {
-        panier.push(product)
-        localStorage.setItem("panier", JSON.stringify(panier))
+      let panier = localStorage.getItem("panier") !== null
+        ? JSON.parse(localStorage.getItem("panier"))
+        : [];
 
+      if (panier.length > 0) {
+        const productFound = panier.find(obj => {
+          return obj.id == id && obj.couleur == colors
+        })
+        if (productFound) {
+          panier = panier.map(obj => {
+            if (obj.id === id && obj.couleur == colors) {
+              return {
+                ...obj,
+                quantity: parseInt(obj.quantity) + parseInt(quantity)
+              }
+            }
+            return obj
+          })
+        } else {
+          panier = [...panier, product];
+        }
+      } else {
+        panier = [...panier, product];
       }
+
+      localStorage.setItem("panier", JSON.stringify(panier))
+
+
+
+
+
+      // const panier = []
+      // if (localStorage.getItem("panier")) {
+      //   panier.push(...JSON.parse(localStorage.getItem("panier")))
+      // }
+
+      // console.log(panier)
+      // let f = panier.filter(obj => {
+      //   return obj.id == id && obj.couleur == colors
+
+      // })
+      // if (f.length == 0) {
+      //   panier.push(product)
+      //   localStorage.setItem("panier", JSON.stringify(panier))
+
+      // }
 
     })
 
@@ -138,37 +171,4 @@ function addProductTfront(product) {
     }
     return html
   }
-
 }
-
-
-// **********Panier
-
-
-// ***************************** Si le panier est vide
-
-// if(panier === null){
-//   const panierVide = `
-//   <div class="container-panier-vide">
-//   Le panier est vide
-//   </div>
-//   `;
-// panierPage3.innerHTML = panier
-// } else{
-//   console.log("Je ne suis pas vide");
-// }
-
-
-function filterPanier(produit, obj) {
-
-  console.log(produit);
-  return produit
-}
-
-let panier = JSON.parse(localStorage.getItem("panier"))
-
-let f = panier.filter(obj => {
-  return obj.id == id && obj.couleur == "White"
-
-})
-console.log(f);
