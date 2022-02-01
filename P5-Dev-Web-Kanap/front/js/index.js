@@ -21,3 +21,4 @@ function addProductTfront(product) {
                 </article>
             </a>`  
 }
+

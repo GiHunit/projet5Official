@@ -8,43 +8,18 @@ fetch(apiUrl + "/" + id)
   .then((response) => response.json())
   .then((product) => {
     item.innerHTML = addProductTfront(product)
-
-    console.log(product.colors)
-
-  })
-  .then((product) => {
-
     const btn = document.getElementById("addCart")
     btn.addEventListener("click", () => {
-
-      const colors = document.getElementById("colors").value
-
-      const price = document.getElementById("price").innerText
-      console.log(price);
-
+      const color = document.getElementById("colors").value
       const quantity = document.getElementById("quantity").value
-
-
-      const productName = document.getElementById("title").innerText
-
-
-      let product = {
-
-        id: id,
-        name: productName,
-        quantity: quantity,
-        couleur: colors,
-        prix: price,
+      const productToAdd = {
+        id: product._id,
+        name: product.name,
+        color,
+        quantity: parseInt(quantity),
+        imageUrl: product.imageUrl,
+        price: parseInt(product.price) * parseInt(quantity)
       }
-
-      // ***************************************** ligne 50  ajout  41
-
-
-
-      // ***************************************** HERE
-
-      // ici
-
 
       let panier = localStorage.getItem("panier") !== null
         ? JSON.parse(localStorage.getItem("panier"))
@@ -52,51 +27,29 @@ fetch(apiUrl + "/" + id)
 
       if (panier.length > 0) {
         const productFound = panier.find(obj => {
-          return obj.id == id && obj.couleur == colors
+          return obj.id == id && obj.color == color
         })
         if (productFound) {
           panier = panier.map(obj => {
-            if (obj.id === id && obj.couleur == colors) {
+            if (obj.id === id && obj.color == color) {
               return {
                 ...obj,
-                quantity: parseInt(obj.quantity) + parseInt(quantity)
+                quantity: obj.quantity + productToAdd.quantity,
+                price: obj.price + productToAdd.price
               }
             }
             return obj
           })
         } else {
-          panier = [...panier, product];
+          panier = [...panier, productToAdd];
         }
       } else {
-        panier = [...panier, product];
+        panier = [...panier, productToAdd];
       }
 
       localStorage.setItem("panier", JSON.stringify(panier))
 
-
-
-
-
-      // const panier = []
-      // if (localStorage.getItem("panier")) {
-      //   panier.push(...JSON.parse(localStorage.getItem("panier")))
-      // }
-
-      // console.log(panier)
-      // let f = panier.filter(obj => {
-      //   return obj.id == id && obj.couleur == colors
-
-      // })
-      // if (f.length == 0) {
-      //   panier.push(product)
-      //   localStorage.setItem("panier", JSON.stringify(panier))
-
-      // }
-
     })
-
-
-
   })
 
 
