@@ -1,4 +1,9 @@
 const items = document.getElementById("cart__items")
+let totalQuantity = 0
+const elemTotalQuantity = document.getElementById("totalQuantity")
+
+let  totalPrice = 0
+const elemTotalPrice = document.getElementById('totalPrice')
 
 
 
@@ -7,8 +12,24 @@ const items = document.getElementById("cart__items")
 let panier = JSON.parse(localStorage.getItem("panier")) || [];
 
 for (let item of panier) {
-  items.innerHTML += addPanierThird(item)
+  console.log(item.quantity)
+  items.innerHTML += addPanierThird(item) 
+  totalQuantity += item.quantity
+  totalPrice += item.price
 }
+
+elemTotalQuantity.innerHTML = totalQuantity
+
+elemTotalPrice.innerHTML = totalPrice
+
+const deleteBtns = document.querySelectorAll(".deleteItem")
+deleteBtns.forEach(btn => {
+  btn.addEventListener("click",  () => {
+    console.log(btn.closest('.cart__item').getAttribute('data-id'))
+    console.log(btn.closest('.cart__item').getAttribute('data-color'));
+    // recup le panier + filtrer avec les elements et les supprimer
+    })
+})
 
 
 
@@ -63,8 +84,8 @@ for (let item of panier) {
 
 
 function addPanierThird(panier) {
-  return `  
-  <article class="cart__item" data-id="{product-ID}" data-color="{product-color}">
+  return ` 
+  <article class="cart__item" data-id="${panier.id}" data-color="${panier.color}">
     <div class="cart__item__img">
       <img src="${panier.imageUrl}" alt="Photographie d'un canapé">
     </div>
@@ -86,3 +107,5 @@ function addPanierThird(panier) {
     </div>
   </article>
 `}
+
+
